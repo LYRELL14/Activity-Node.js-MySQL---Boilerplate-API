@@ -11,7 +11,7 @@ function model(sequelize) {
         lastName: { type: DataTypes.STRING, allowNull: false },
         acceptTerms: { type: DataTypes.BOOLEAN },
         role: { type: DataTypes.STRING, allowNull: false },
-        verificationToken: { type: DataTypes.STRING},
+        verificationToken: { type: DataTypes.STRING },
         verified: { type: DataTypes.DATE },
         resetToken: { type: DataTypes.STRING },
         resetTokenExpires: { type: DataTypes.DATE },
@@ -20,22 +20,22 @@ function model(sequelize) {
         updated: { type: DataTypes.DATE },
         isVerified: {
             type: DataTypes.VIRTUAL,
-            get() { return !!(this.verifid || this.passwordReset); }
+            get() { return !!(this.verified || this.passwordReset); }
         }
     };
 
     const options = {
-
-        timestamps: false,
+        // disable default timestamp fields (createdAt and updatedAt)
+        timestamps: false, 
         defaultScope: {
-
+            // exclude password hash by default
             attributes: { exclude: ['passwordHash'] }
         },
         scopes: {
-
+            // include hash with this scope
             withHash: { attributes: {}, }
-        }
+        }        
     };
-    
-    return sequelize.define('account', attribute, options);
+
+    return sequelize.define('account', attributes, options);
 }
